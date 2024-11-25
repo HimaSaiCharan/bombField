@@ -140,20 +140,29 @@ function getKey() {
   return keyPressed;
 }
 
+function validPositionWhenAPressed(position) {
+  if (position + 1 > 100) {
+    return position;
+  }
+
+  return position + 1;
+}
+
+function validPositionWhenWPressed(position, destination) {
+  if (position + 10 !== destination && position + 10 > 100) {
+    return position;
+  }
+  return position + 10;
+}
+
 function getNextPosition(currentPosition, destination) {
   const key = getKey();
 
   switch (key) {
     case 'a':
-      if (currentPosition + 1 > 100) {
-        return currentPosition;
-      }
-      return currentPosition + 1;
+      return validPositionWhenAPressed(currentPosition);
     case 'w':
-      if (currentPosition + 10 !== destination && currentPosition + 10 > 100) {
-        return currentPosition;
-      }
-      return currentPosition + 10;
+      return validPositionWhenWPressed(currentPosition, destination);
     case 'd':
       return currentPosition - 1;
     case 's':
