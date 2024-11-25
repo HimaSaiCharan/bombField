@@ -16,36 +16,29 @@ function getRowFooting() {
   return '┣━━━━╋━━━━╋━━━━╋━━━━╋━━━━╋━━━━╋━━━━╋━━━━╋━━━━╋━━━━┫';
 }
 
-function getCharsInCell(p1Pos, cellNumber, bombBoxNumber, winBoxNumber) {
-  if (cellNumber === winBoxNumber) {
-    return ' ' + '🎉' + ' ┃';
+function getCharsInCell(cellContext, cellNumber, boxNumber) {
+  if (cellNumber === boxNumber) {
+    return ' ' + cellContext + ' ┃';
   }
 
-  if (cellNumber === bombBoxNumber) {
-    return ' ' + '💥' + ' ┃';
-  }
-
-  if (p1Pos === cellNumber) {
-    return ' ' + p1Name + ' ┃';
-  }
   return ' ⬜ ┃';
 }
 
-function createRow(p1Pos, rowStartNumber, bombBoxNumber, winBox) {
+function createRow(cellContext, cellNumber, rowStartNumber) {
   let rowString = '';
 
   for (let boxNumber = rowStartNumber; boxNumber > rowStartNumber - 10; boxNumber--) {
-    rowString += getCharsInCell(p1Pos, boxNumber, bombBoxNumber, winBox);
+    rowString += getCharsInCell(cellContext, cellNumber, boxNumber);
   }
 
   return '┃' + rowString;
 }
 
-function createGrids(p1Pos, bombBox, winBox) {
+function createGrids(cellContext, cellNumber) {
   let grid = getHeading() + '\n';
 
   for (let noOfRows = 10; noOfRows > 0; noOfRows--) {
-    grid += createRow(p1Pos, noOfRows * 10, bombBox, winBox) + '\n';
+    grid += createRow(cellContext, cellNumber, noOfRows * 10) + '\n';
 
     if (noOfRows !== 1) {
       grid += getRowFooting() + '\n';
@@ -104,7 +97,7 @@ function getEndPosition() {
 function getStartPosition() {
   const position = +prompt("Enter your starting position(1-10): ", "01");
 
-  if (position < 10 && position > 0) {
+  if (position < 11 && position > 0) {
     return position;
   }
 
@@ -182,20 +175,20 @@ function startGame() {
     console.clear();
 
     if (isBombEncountered(startPosition, bombPositions)) {
-      console.log(createGrids('', startPosition));
+      console.log(createGrids('💥', startPosition));
       console.log("Ohh..You encountered a Bomb💥💥..");
       startPosition = 0;
 
       continue;
     }
 
-    console.log(createGrids(startPosition));
+    console.log(createGrids(p1Name,startPosition));
     console.log("a : ⬅️   w : ⬆️   d : ➡️  s : ⬇️");
 
     startPosition = getNextPosition(startPosition, endPosition);
   }
   console.clear();
-  console.log(createGrids('', '', startPosition - 10));
+  console.log(createGrids('🎉', startPosition - 10));
   console.log("Congrats..🎉..You found the destination🤩🥳");
 }
 
